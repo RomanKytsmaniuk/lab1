@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  payment-gateway:
+    build: ./payment_gateway
+    container_name: payment-gateway-04
+    ports:
+      - "8004:8000"
+    networks:
+      lab-network:
+        aliases:
+          - payment-gateway
+          - payment-gateway-04
+
+  checkout-service:
+    build: ./checkout_service
+    container_name: checkout-service-04
+    ports:
+      - "9004:8000"
+    depends_on:
+      - payment-gateway
+    networks:
+      - lab-network
+
+networks:
+  lab-network:
+    driver: bridge

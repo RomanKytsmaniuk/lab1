@@ -1,0 +1,113 @@
+{
+  "info": {
+    "_postman_id": "c71a3994-4d89-4b10-8b1b-b4a8e239a584",
+    "name": "Lab1_Microservices_Variant4",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Checkout Order",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Verify student_id is 4\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.student_id).to.eql(4);",
+              "    pm.expect(jsonData.order.status).to.eql(\"Paid\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"account_id\": 401,\n    \"item_name\": \"Cloud Subscription\",\n    \"amount\": 120.0\n}"
+        },
+        "url": {
+          "raw": "http://localhost:9004/checkout",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9004",
+          "path": ["checkout"]
+        }
+      }
+    },
+    {
+      "name": "Get Payment Status",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Verify student_id is 4 and tx exists\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.student_id).to.eql(4);",
+              "    pm.expect(jsonData.transaction.tx_id).to.eql(401);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8004/status/401",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8004",
+          "path": ["status", "401"]
+        }
+      }
+    },
+    {
+      "name": "Get Summary",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Verify summary contains student_id\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.student_id).to.eql(4);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9004/summary",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9004",
+          "path": ["summary"]
+        }
+      }
+    }
+  ]
+}
