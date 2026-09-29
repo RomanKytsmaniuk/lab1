@@ -1,0 +1,35 @@
+name: Python CI Application
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Lint code with flake8
+        run: |
+          pip install flake8
+          flake8 .
+
+      - name: Demonstrate GitHub Secrets
+        env:
+          SUPER_SECRET: ${{ secrets.MY_SUPER_SECRET_KEY }}
+        run: |
+          echo "Спроба вивести секрет у консоль:"
+          echo "Мій секрет: $SUPER_SECRET"
+
+      - name: Run unit tests
+        run: |
+          python -m unittest test_calculator.py
