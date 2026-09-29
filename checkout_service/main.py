@@ -32,7 +32,10 @@ def process_checkout(order: CheckoutRequest):
             timeout=5
         )
     except requests.exceptions.ConnectionError:
-        raise HTTPException(status_code=503, detail="Payment Gateway is unavailable")
+        raise HTTPException(
+            status_code=503,
+            detail="Payment Gateway is unavailable"
+        )
 
     if response.status_code != 200:
         raise HTTPException(
